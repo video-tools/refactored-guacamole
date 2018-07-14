@@ -1,0 +1,274 @@
+FROM alpine:3.7 as base
+
+WORKDIR /tmp/workdir
+
+RUN \
+    apk add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat freetype fontconfig fribidi 
+
+FROM base AS build
+
+ARG PREFIX="/usr/local"
+ARG PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
+ARG LD_LIBRARY_PATH="$PREFIX/lib"
+ARG MAKEFLAGS='-j2'
+
+RUN \
+    apk add --no-cache --update \
+        autoconf \
+        automake \
+        binutils \
+        bzip2 \
+        cmake \
+        curl \
+        coreutils \
+        diffutils \
+        expat-dev \
+        file \
+        fontconfig-dev \
+        freetype-dev \
+        fribidi-dev \
+        g++ \
+        gcc \
+        gnupg \
+        gperf \
+        libtool \
+        make \
+        nasm \
+        openssl-dev \
+        python \
+        tar \
+        yasm \
+        zlib-dev
+
+<% if options.ogg %>
+ARG OGG_SHA256SUM=<%= options.ogg_sha256sum %>
+ARG OGG_VERSION=<%= options.ogg_version %>
+RUN  \
+dir=/tmp/ogg && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["ogg"]["buildscript"].strip %> && \
+rm -rf ${dir} 
+<% end %>
+
+<% if options.opencoreamr %>
+ARG OPENCOREAMR_SHA1SUM=<%= options.opencoreamr_sha1sum %>
+ARG OPENCOREAMR_VERSION=<%= options.opencoreamr_version %> 
+RUN  \
+dir=/tmp/opencore-amr && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["opencoreamr"]["buildscript"].strip %> && \
+rm -rf ${dir} 
+<% end %>
+
+<% if options.opus %>
+ARG OPUS_SHA256SUM=<%= options.opus_sha256sum %>
+ARG OPUS_VERSION=<%= options.opus_version %>
+RUN  \
+dir=/tmp/opus && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["opus"]["buildscript"].strip %> && \
+rm -rf ${dir} 
+<% end %>
+
+<% if options.x264 %>
+ARG X264_VERSION=<%= options.x264_version %>
+RUN set -e ;\
+dir=/tmp/x264 ;\
+mkdir -p ${dir} ;\
+cd ${dir} ;\
+<%= deps["x264"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.x265 %>
+ARG X265_MD5SUM=<%= options.x265_md5sum %>
+ARG X265_VERSION=<%= options.x265_version %>
+RUN  \
+dir=/tmp/x265 && \
+mkdir -p ${dir} && \
+<%= deps["x265"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.openjpeg %>
+ARG OPENJPEG_VERSION=<%= options.openjpeg_version %>
+RUN  \
+dir=/tmp/openjpeg && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["openjpeg"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.fdkaac %>
+ARG FDKAAC_VERSION=<%= options.fdkaac_version %>
+RUN  \
+dir=/tmp/fdkaac && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["fdkaac"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.lame %>	
+ARG LAME_VERSION=<%= options.lame_version %>
+RUN  \
+dir=/tmp/lame && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["lame"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.ass %>
+ARG ASS_SHA256SUM=<%= options.ass_sha256sum %>
+ARG ASS_VERSION=<%= options.ass_version %>
+RUN  \
+dir=/tmp/ass && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["ass"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.theora %>    
+ARG THEORA_SHA256SUM=<%= options.theora_sha256sum %>
+ARG THEORA_VERSION=<%= options.theora_version %>
+RUN  \
+dir=/tmp/theora && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["theora"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.vorbis %>    
+ARG VORBIS_SHA256SUM=<%= options.vorbis_sha256sum %>
+ARG VORBIS_VERSION=<%= options.vorbis_version %>
+RUN  \
+dir=/tmp/vorbis && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["vorbis"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.vpx %>	
+ARG VPX_VERSION=<%= options.vpx_version %>
+RUN  \
+dir=/tmp/vpx && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["vpx"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.xvid %>    
+ARG XVID_SHA256SUM=<%= options.xvid_sha256sum %>
+ARG XVID_VERSION=<%= options.xvid_version %>
+RUN  \
+dir=/tmp/xvid && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["xvid"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.vidstab %>
+ARG VIDSTAB_SHA256SUM=<%= options.vidstab_sha256sum %>
+ARG VIDSTAB_VERSION=<%= options.vidstab_version %>
+RUN  \
+dir=/tmp/vidstab && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["vidstab"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.kvazaar %>
+ARG KVAZAAR_VERSION=<%= options.kvazaar_version %>
+RUN  \
+dir=/tmp/kvazaar && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["kvazaar"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+<% if options.aom %>
+ARG AOM_VERSION=<%= options.aom_version %>
+RUN  \
+dir=/tmp/aom && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+<%= deps["aom"]["buildscript"].strip %> && \
+rm -rf ${dir}
+<% end %>
+
+ENV FFMPEG_VERSION=4.0 \
+	FFMPEG_GPG=FCF986EA15E6E293A5644F10B4322F04D67658D8 
+
+RUN \
+dir=/tmp/ffmpeg && \
+mkdir -p ${dir} && \
+cd ${dir} && \
+curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2.asc && \
+if grep -vi '<DOCTYPE'; then \
+gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys ${FFMPEG_GPG} ; \
+gpg --batch --verify ffmpeg-4.0.tar.bz2.asc ffmpeg-${FFMPEG_VERSION}.tar.bz2 ; \
+fi && \
+tar -x --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+./configure \
+--disable-debug \
+--disable-doc \
+--disable-ffplay \
+--enable-shared \
+--enable-avresample \
+--enable-gpl \
+--enable-nonfree \
+--enable-postproc \
+--enable-small \
+--enable-version3 \
+--enable-libfreetype \
+<%= '--enable-libopencore-amrnb --enable-libopencore-amrwb ' if options.opencoreamr %> \
+<%= '--enable-libopus ' if options.opus %> \
+<%= '--enable-libx264 ' if options.x264 %> \
+<%= '--enable-libx265 ' if options.x265 %> \
+<%= '--enable-libass ' if options.ass %> \
+<%= '--enable-libvidstab ' if options.vidstab %> \
+<%= '--enable-libmp3lame ' if options.lame %> \
+<%= '--enable-libopenjpeg ' if options.openjpeg %> \
+<%= '--enable-libtheora ' if options.theora %> \
+<%= '--enable-libvorbis ' if options.vorbis %> \
+<%= '--enable-libvpx ' if options.vpx %> \
+<%= '--enable-libxvid ' if options.xvid %> \
+<%= '--enable-libfdk_aac ' if options.fdkaac %> \
+<%= '--enable-libkvazaar ' if options.kvazaar %> \
+<%= '--enable-libaom --extra-libs=-lpthread ' if options.aom %> \
+--extra-cflags="-I${PREFIX}/include" \
+--extra-ldflags="-L${PREFIX}/lib" \
+--extra-libs=-ldl \
+--prefix="${PREFIX}" && \
+make && \
+make install && \
+make distclean && \
+hash -r && \
+cd tools && \
+make qt-faststart && \
+cp qt-faststart ${PREFIX}/bin
+
+RUN set -e ;\
+LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+
+FROM        base
+
+ONBUILD ARG PKG_CONFIG_PATH="/usr/local/lib/pkgconfig"
+ONBUILD ARG PREFIX="/usr/local"
+ENV         LD_LIBRARY_PATH=/usr/local/lib
+
+COPY --from=build /usr/local/ /usr/local/
+
